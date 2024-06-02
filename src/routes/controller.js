@@ -2,11 +2,17 @@ const autoBindI = require("auto-bind-inheritance");
 const { validationResult } = require("express-validator");
 const User = require("../models/user");
 const Order = require("../models/order");
+const Loan = require("../models/loan");
+const DepositList = require("../models/depositList");
+const OrderBay = require("../models/order-by");
 
 class Controller {
   constructor() {
     autoBindI(this);
     this.User = User;
+    this.Order = Order;
+    this.Loan = Loan;
+    this.DepositList = DepositList;
   }
   validationBody(req, res) {
     const result = validationResult(req);
@@ -24,9 +30,10 @@ class Controller {
     }
     next();
   }
-
-  response({ res, message, code = 200, data = {} }) {
+ 
+  response({ res, status = "success", message = null, code = 200, data = {} }) {
     res.status(code).json({
+      status,
       message,
       data,
     });
